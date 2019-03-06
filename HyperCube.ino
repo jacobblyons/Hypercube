@@ -30,10 +30,10 @@ CRGB _rawleds[4][32];
 void setup()
 {
   Serial.begin(9600);
-    FastLED.addLeds<NEOPIXEL, 8>(_rawleds[0], 32);
-    FastLED.addLeds<NEOPIXEL, STRIP_TWO_PIN>(_rawleds[1], STRIP_LENGTH);
-    FastLED.addLeds<NEOPIXEL, STRIP_THREE_PIN>(_rawleds[2], STRIP_LENGTH);
-    FastLED.addLeds<NEOPIXEL, STRIP_FOUR_PIN>(_rawleds[3], STRIP_LENGTH);
+    FastLED.addLeds<NEOPIXEL, STRIP_ONE_PIN>(_rawleds[TAN], STRIP_LENGTH);
+    FastLED.addLeds<NEOPIXEL, STRIP_TWO_PIN>(_rawleds[PURPLE], STRIP_LENGTH);
+    FastLED.addLeds<NEOPIXEL, STRIP_THREE_PIN>(_rawleds[PINK], STRIP_LENGTH);
+    FastLED.addLeds<NEOPIXEL, STRIP_FOUR_PIN>(_rawleds[GREY], STRIP_LENGTH);
    
     pinMode(18, INPUT);
     pinMode(19, INPUT);
@@ -45,16 +45,8 @@ void setup()
 
 void loop()
 {
-  for(int i = 0 ; i < 32 ; i ++){
-    getLED(9,i,0) = CRGB::Blue;
-    delay(300);
-    FastLED.show();
-    
-    getLED(9,i,0) = CRGB::Red;
-    delay(300);
-    FastLED.show();
-  }
-   
+  
+  testx();
    
     if (demoState){
         // demo mode code
@@ -66,6 +58,78 @@ void loop()
         // mic/audio mode code
     }
 
+}
+void testx() {
+  int delayTime = 100;
+  for(int i = 0 ; i < LEDS_ON_BOT ; i ++){
+    //bot right
+    getLED(i,0,0) = CRGB::Blue;
+    delay(delayTime);
+    FastLED.show();
+    getLED(i,0,0) = CRGB::Red;
+    delay(delayTime);
+    FastLED.show();
+
+    //botleft
+    getLED(i,0,LEDS_ON_BOT-1) = CRGB::Blue;
+    delay(delayTime);
+    FastLED.show();
+    getLED(i,0,LEDS_ON_BOT-1) = CRGB::Red;
+    delay(delayTime);
+    FastLED.show();
+    
+    //topright DEAD LEDS
+    getLED(i,LEDS_ON_SIDES -1,0) = CRGB::Blue;
+    delay(delayTime);
+    FastLED.show();
+    getLED(i,LEDS_ON_SIDES -1,0) = CRGB::Red;
+    delay(delayTime);
+    FastLED.show();
+
+    //topleft
+    getLED(i,LEDS_ON_SIDES -1,LEDS_ON_TOP -1) = CRGB::Blue;
+    delay(delayTime);
+    FastLED.show();
+    getLED(i,LEDS_ON_SIDES -1,LEDS_ON_TOP -1) = CRGB::Red;
+    delay(delayTime);
+    FastLED.show();
+  }
+}
+
+void testAll(){
+  int delayTime = 15;
+  for (int i = 0 ; i < STRIP_LENGTH; i ++) {
+    _rawleds[0][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+    _rawleds[0][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+  }
+  for (int i = 0 ; i < STRIP_LENGTH; i ++) {
+    _rawleds[1][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+    _rawleds[1][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+  }
+  for (int i = 0 ; i < STRIP_LENGTH; i ++) {
+    _rawleds[2][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+    _rawleds[2][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+  }
+  for (int i = 0 ; i < STRIP_LENGTH; i ++) {
+    _rawleds[3][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+    _rawleds[3][i] = CRGB::HotPink;
+    FastLED.show();
+    delay(delayTime);
+  }
 }
 
 void demo(){

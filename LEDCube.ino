@@ -7,7 +7,7 @@ CRGB &getLED(int x, int y, int z)
     {
         //left
         if (x == i && y == LEDS_ON_SIDES - 1 && z == LEDS_ON_TOP - 1)
-            return _rawleds[PURPLE][LEDS_ON_TOP - 1 - i];
+            return _rawleds[PURPLE][STRIP_LENGTH - 1 - i];
         //right
         if (x == i && y == LEDS_ON_SIDES - 1 && z == 0)
             return _rawleds[GREY][STRIP_LENGTH - LEDS_ON_TOP - 1 + i];
