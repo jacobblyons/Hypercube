@@ -27,6 +27,7 @@ volatile int curPattern = 0;
 int patternCount = 12;
 volatile long lastPress;
 
+
 CRGB _rawleds[4][32];
 
 #define LEFT_BUTTON 18 
@@ -58,10 +59,16 @@ void setup()
 
 void loop()
 {
-    runPattern();
-    
+  //get sensor values 
+  int vval = analogRead(0);
+  int mm = vval*5;
+  int sonarInInches = mm/25.4;
 
+  //Serial.println(sonarInInches );
+  risingFallingPattern(sonarInInches);
+  //risingFallingPattern(5);
 }
+
 
 void toggleLeft(){
     noInterrupts();
@@ -84,7 +91,7 @@ void toggleRight() {
 void runPattern() {
   switch(curPattern) {
     case 0: 
-      risingFallingPattern();
+      //risingFallingPattern(sonarInInches);
       break;
     case 1 : 
       pulsingPattern(20);  
