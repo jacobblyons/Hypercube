@@ -16,7 +16,8 @@ void risingFallingPattern(int sonar){
   }
 
   FastLED.show();
-  FastLED.delay(100 * sonar  );
+  Serial.println(10*sonar);
+  FastLED.delay(10 *sonar);
 
 }
 
@@ -34,13 +35,13 @@ void sonarDistance(int sonar) {
   }
 
   FastLED.show();
-  FastLED.delay(100 * sonar);
+  FastLED.delay(10 * sonar);
 
 }
 
 void distancePattern(int dist){
-  
- 
+
+
 
   for(int x = 0; x < 12 ; x++) {
     for(int y = 0; y < 12 ; y++) {
@@ -106,24 +107,25 @@ void exampleDemo(int delayTime){
       for(int y = 0; y < 12 ; y++) {
         for(int z = 0; z < 12 ; z++) {
            if(!hasLED(x,y,z)) continue;
-           /*_rawleds[TAN].fadeToBlackBy(40);
-           _rawleds[PURPLE].fadeToBlackBy(40);
-           _rawleds[PINK].fadeToBlackBy(40);
-           _rawleds[GREY].fadeToBlackBy(40);*/
-           getLED(x,y,z) = CHSV(160,255,255);
+           getLED(x,y,z) = CHSV(160,255,255);   // Blue
+           FastLED.delay(10);
+           getLED(x,y,z) = CHSV(0,0,0);   // Blue
+
+           FastLED.show();
+           FastLED.delay(5);
         }
       }
     }
 
-    for(int i = 0; i < STRIP_LENGTH; i ++) {
-      _rawleds[TAN][i].fadeToBlackBy(40);
-      _rawleds[PURPLE][i].fadeToBlackBy(40);
-      _rawleds[PINK][i].fadeToBlackBy(40);
-      _rawleds[GREY][i].fadeToBlackBy(40);
-    }
+    // for(int i = 0; i < STRIP_LENGTH; i ++) {
+       // getLED(x,y,z) = CHSV(0,0,0);
+      // _rawleds[PURPLE][i].fadeToBlackBy(40);
+      // _rawleds[PINK][i].fadeToBlackBy(40);
+      // _rawleds[GREY][i].fadeToBlackBy(40);
+    // }
 
-    
-    FastLED.delay(delayTime);
+
+    // FastLED.delay(delayTime);
 
 }
 
