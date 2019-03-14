@@ -109,10 +109,17 @@ void exampleDemo(int delayTime){
            if(!hasLED(x,y,z)) continue;
            getLED(x,y,z) = CHSV(160,255,255);   // Blue
            FastLED.delay(10);
-           getLED(x,y,z) = CHSV(0,0,0);   // Blue
-
+           getLED(x,y,z) = CHSV(0,0,0);
            FastLED.show();
            FastLED.delay(5);
+           // if(!hasLED(x,y,z) and !(hasLED(11-x,11-y,11-z))) continue;
+           // getLED(x,y,z) = CHSV(160,255,255);   // Blue
+           // getLED(11-x,11-y,11-z) = CRGB(255,0,0);   // Red
+           // FastLED.delay(10);
+           // getLED(x,y,z) = CHSV(0,0,0);
+           // getLED(11-x,11-y,11-z) = CRGB(0,0,0);
+           // FastLED.show();
+           // FastLED.delay(5);
         }
       }
     }
