@@ -18,13 +18,14 @@
 volatile bool demoState = false;
 volatile bool sonarState = false;
 volatile bool micState = false;
+volatile int sonarValue = 1;
 volatile long times[2];
 volatile long elapsed;
 int count = 0;
 bool newSig = true;
 bool rec = false;
 volatile int curPattern = 0;
-int patternCount = 12;
+int patternCount = 4;
 volatile long lastPress;
 const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
@@ -56,27 +57,33 @@ void setup()
    
     pinMode(LEFT_BUTTON, INPUT);
     pinMode(RIGHT_BUTTON, INPUT);
+    pinMode(A0, INPUT); // sonar sensor
     
     attachInterrupt(digitalPinToInterrupt(LEFT_BUTTON), toggleLeft, RISING);
     attachInterrupt(digitalPinToInterrupt(RIGHT_BUTTON), toggleRight,RISING);
 
     times[0] = 0;
     times[1] = 0;
+
 }
 
 void loop()
 {
   //get sensor values 
-  int vval = analogRead(0);
-  int mm = vval*5;
-  int sonarInInches = mm/25.4;
+//  int vval = analogRead(0);
+//  int mm = vval*5;
+//  int sonarInInches = mm/25.4;
 
   //Serial.println(sonarInInches );
-  //risingFallingPattern(sonarInInches);
-  //risingFallingPattern(5);
+//  risingFallingPattern(sonarInInches);
   //micpattern();
   //micPattern2();
-  playPattern1();
+//  playPattern1();
+  runPattern();
+//  risingFallingPattern(10);
+//  sonarDistance(5);
+//  exampleDemo(10);
+
 }
 
 void toggleLeft(){
@@ -98,18 +105,46 @@ void toggleRight() {
 }
 
 void runPattern() {
-  switch(curPattern) {
-    case 0: 
-      //risingFallingPattern(sonarInInches);
-      break;
-    case 1 : 
-      pulsingPattern(20);  
-      break;
-    case 2 :
-       pulsingPattern(20);
-       break;
-  }
-}
+    if(curPattern == 0){
+      Serial.println("Entered case 0");
+      risingFallingPattern();
+      }
+    else if(curPattern == 1){
+      Serial.println("Entered case 1");
+      risingFallingPattern();
+    }
+    else if(curPattern == 2){
+      Serial.println("Entered case 2");
+      micPattern2();
+    }
+    else if(curPattern == 3){
+      Serial.println("Entered case 3");
+      playPattern1();
+    }
+//  exampleDemo(200);
+      
+    }
+      
+//  switch(curPattern) {
+//    case 0: 
+//      risingFallingPattern(10);
+//      Serial.println("Entered case 0");
+//      break;
+//    case 1 : 
+//      pulsingPattern(20);  
+//      Serial.println("Entered case 1");
+//      break;
+//    case 2 :
+//       pulsingPattern(20);
+//       Serial.println("Entered case 2");
+//       break;
+//    case 3: 
+//      exampleDemo(20);
+//      Serial.println("Entered case 3");
+//      break;
+  
+//  }
+//}
 
 
 void testCorners(){
@@ -452,7 +487,8 @@ void playPattern1(){
   for (int i = endIndex - tracerLength - 2; i < startIndex+tracerLength+3;i++){// - tracerLength; i++){
     _rawleds[0][i] = CRGB::Black;
   }
-  delay(10);  //<--remove to inhibit seizure flashing
+  int sonarValue = (analogRead(0)*5)/25.4;
+  delay(sonarValue);  //<--remove to inhibit seizure flashing
   endIndex++;
   startIndex++;
   if (endIndex > 121){
