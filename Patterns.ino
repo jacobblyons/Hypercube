@@ -1,9 +1,8 @@
 int r = 6;
 int rfCount = 0;
-void risingFallingPattern(int sonar){
-
+void risingFallingPattern(){
   rfCount =  (rfCount + 1) % 25;
-
+  
   for(int x = 0; x < 12 ; x++) {
     for(int y = 0; y < 12 ; y++) {
       for(int z = 0; z < 12 ; z++) {
@@ -14,10 +13,12 @@ void risingFallingPattern(int sonar){
 
     }
   }
-
+  int sonarValue = (analogRead(0)*5)/25.4;
+//  int mm = vval*5;
+//  int sonarInInches = mm/25.4;
   FastLED.show();
-  Serial.println(10*sonar);
-  FastLED.delay(10 *sonar);
+  Serial.println(10*sonarValue);
+  delay(10 *sonarValue);
 
 }
 
@@ -108,6 +109,7 @@ void exampleDemo(int delayTime){
         for(int z = 0; z < 12 ; z++) {
            if(!hasLED(x,y,z)) continue;
            getLED(x,y,z) = CHSV(160,255,255);   // Blue
+           FastLED.show();
            FastLED.delay(10);
            getLED(x,y,z) = CHSV(0,0,0);
            FastLED.show();
@@ -133,7 +135,6 @@ void exampleDemo(int delayTime){
 
 
     // FastLED.delay(delayTime);
-
 }
 
 bool inSphere(int x, int y, int z, int cx, int cy, int cz, int r){
