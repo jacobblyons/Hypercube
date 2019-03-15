@@ -1,6 +1,5 @@
 #include "FastLED.h"
 
-
 #define STRIP_ONE_PIN 8
 #define STRIP_TWO_PIN 10
 #define STRIP_THREE_PIN 11
@@ -25,12 +24,12 @@ int count = 0;
 bool newSig = true;
 bool rec = false;
 volatile int curPattern = 0;
-int patternCount = 4;
+int patternCount = 7;
 volatile long lastPress;
 const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
-float lastLevel;
-float audioLevel;
+double lastLevel;
+double audioLevel;
 int dir = 1;
 int tracerLength = 3;
 int startIndex = 3;
@@ -69,28 +68,14 @@ void setup()
 
 void loop()
 {
-  //get sensor values 
-//  int vval = analogRead(0);
-//  int mm = vval*5;
-//  int sonarInInches = mm/25.4;
-
-  //Serial.println(sonarInInches );
-//  risingFallingPattern(sonarInInches);
-  //micpattern();
-  //micPattern2();
-//  playPattern1();
-  runPattern();
-//  risingFallingPattern(10);
-//  sonarDistance(5);
-//  exampleDemo(10);
-
+    runPattern();
 }
 
 void toggleLeft(){
     noInterrupts();
     if(micros() - lastPress < 170000) return;
     curPattern = curPattern == 0 ? patternCount -1 : curPattern -1;
-    Serial.println(curPattern);
+    //Serial.println(curPattern);
     lastPress = micros();
     interrupts();
 }
@@ -99,53 +84,41 @@ void toggleRight() {
   noInterrupts();
   if(micros() - lastPress < 150000) return;
   curPattern = (curPattern +1) % patternCount;
-  Serial.println(curPattern);
+  //Serial.println(curPattern);
   lastPress = micros();
   interrupts();
 }
 
 void runPattern() {
     if(curPattern == 0){
-      Serial.println("Entered case 0");
+      Serial.println("Pattern 0");
       risingFallingPattern();
       }
     else if(curPattern == 1){
-      Serial.println("Entered case 1");
-      risingFallingPattern();
+      Serial.println("Pattern 1");
+      randomRainbowPattern();
     }
     else if(curPattern == 2){
-      Serial.println("Entered case 2");
-      micPattern2();
+      Serial.println("Pattern 2");
+      micPattern();
     }
     else if(curPattern == 3){
-      Serial.println("Entered case 3");
+      Serial.println("Pattern 3");
+      micPattern2();
+    }
+    else if(curPattern == 4){
+      Serial.println("Pattern 4");
       playPattern1();
     }
-//  exampleDemo(200);
-      
+    else if(curPattern == 5){
+      Serial.println("Pattern 5");
+      wavePattern();
     }
-      
-//  switch(curPattern) {
-//    case 0: 
-//      risingFallingPattern(10);
-//      Serial.println("Entered case 0");
-//      break;
-//    case 1 : 
-//      pulsingPattern(20);  
-//      Serial.println("Entered case 1");
-//      break;
-//    case 2 :
-//       pulsingPattern(20);
-//       Serial.println("Entered case 2");
-//       break;
-//    case 3: 
-//      exampleDemo(20);
-//      Serial.println("Entered case 3");
-//      break;
-  
-//  }
-//}
-
+    else if(curPattern == 6){
+      Serial.println("Pattern 6");
+      flashPattern();
+    }
+}
 
 void testCorners(){
   // pin 8 strip test
@@ -241,17 +214,13 @@ void ECHOF(){
 }
 
 void micPattern(){
+   int buffer = 0;
    double audio_volts = getAudioSignal();
 //////////////////LED ASSIGNMENT///////////////////////////
-//reset all leds back to black from last audio pass
-//  for (int i = 10 ; i < STRIP_LENGTH; i ++) {
-//    _rawleds[0][i] = CRGB::Black;
-//    _rawleds[1][i] = CRGB::Black;
-//    _rawleds[2][i] = CRGB::Black;
-//    _rawleds[3][i] = CRGB::Black;
-//    FastLED.show();
-// }
-    if(audio_volts < 2.2){      
+    if (audio_volts < lastLevel){
+      buffer = .25;
+    }
+    if(audio_volts + buffer < 2.2){      
     for (int i = 20 ; i < STRIP_LENGTH; i ++) {
       _rawleds[0][i] = CRGB::Black;
       _rawleds[1][i] = CRGB::Black;
@@ -259,81 +228,85 @@ void micPattern(){
       _rawleds[3][i] = CRGB::Black;
       FastLED.show();
     }}
-    if (audio_volts < 2.0){
+    if (audio_volts + buffer < 2.0){
       _rawleds[0][19] = CRGB::Black;
       _rawleds[1][19] = CRGB::Black;
       _rawleds[2][19] = CRGB::Black;
       _rawleds[3][19] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 1.8){
+    if (audio_volts + buffer < 1.8){
       _rawleds[0][18] = CRGB::Black;
       _rawleds[1][18] = CRGB::Black;
       _rawleds[2][18] = CRGB::Black;
       _rawleds[3][18] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 1.6){
+    if (audio_volts + buffer < 1.6){
       _rawleds[0][17] = CRGB::Black;
       _rawleds[1][17] = CRGB::Black;
       _rawleds[2][17] = CRGB::Black;
       _rawleds[3][17] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 1.4){
+    if (audio_volts + buffer < 1.4){
       _rawleds[0][16] = CRGB::Black;
       _rawleds[1][16] = CRGB::Black;
       _rawleds[2][16] = CRGB::Black;
       _rawleds[3][16] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 1.2){
+    if (audio_volts + buffer < 1.2){
       _rawleds[0][15] = CRGB::Black;
       _rawleds[1][15] = CRGB::Black;
       _rawleds[2][15] = CRGB::Black;
       _rawleds[3][15] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 1.0){
+    if (audio_volts + buffer < 1.0){
       _rawleds[0][14] = CRGB::Black;
       _rawleds[1][14] = CRGB::Black;
       _rawleds[2][14] = CRGB::Black;
       _rawleds[3][14] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 0.8){
+    if (audio_volts + buffer < 0.8){
       _rawleds[0][13] = CRGB::Black;
       _rawleds[1][13] = CRGB::Black;
       _rawleds[2][13] = CRGB::Black;
       _rawleds[3][13] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 0.7){
+    if (audio_volts + buffer < 0.7){
       _rawleds[0][12] = CRGB::Black;
       _rawleds[1][12] = CRGB::Black;
       _rawleds[2][12] = CRGB::Black;
       _rawleds[3][12] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 0.6){
+    if (audio_volts + buffer < 0.6){
       _rawleds[0][11] = CRGB::Black;
       _rawleds[1][11] = CRGB::Black;
       _rawleds[2][11] = CRGB::Black;
       _rawleds[3][11] = CRGB::Black;
       FastLED.show();
     }
-    if (audio_volts < 0.4){
+    if (audio_volts + buffer< 0.4){
       _rawleds[0][10] = CRGB::Black;
       _rawleds[1][10] = CRGB::Black;
       _rawleds[2][10] = CRGB::Black;
       _rawleds[3][10] = CRGB::Black;
-      FastLED.show();
+      FastLED.show();      
     }
+    buffer -= 0.1;
 
 ////max voltage ~= 2.4V, may need to scale adjustment based on mic tuning/gain,
     int scale = 9; //bottom strip always lit
-    if (audio_volts <0.5){
-      scale = 11;
+    if (audio_volts >0.4){
+      scale = 10;
+    }
+    if (audio_volts < 0.5&& audio_volts > 0.4){
+      scale = 11; 
     }
     if (audio_volts < 0.7&& audio_volts > 0.5){
       scale = 12; 
@@ -356,10 +329,10 @@ void micPattern(){
     if (audio_volts < 2.0 && audio_volts > 1.8){
      scale = 18;
     }
-    if (audio_volts < 2.2 && audio_volts > 2.0){
+    if (audio_volts < 2.1 && audio_volts > 2.0){
      scale = 19;
     }
-    if(audio_volts > 2.2){
+    if(audio_volts > 2.1){
       scale = STRIP_LENGTH;
     }
     
@@ -384,6 +357,7 @@ void micPattern(){
       }
   }
   FastLED.show(); //display current levels
+  lastLevel = audio_volts;
 }
 
 void micPattern2(){
@@ -498,6 +472,85 @@ void playPattern1(){
   }
 }
 
+void randomRainbowPattern(){
+  for (int i = 0; i < STRIP_LENGTH; i++){
+    _rawleds[0][i].r = random8();
+    _rawleds[0][i].g = random8();
+    _rawleds[0][i].b = random8();
+    _rawleds[1][i].r = random8();
+    _rawleds[1][i].g = random8();
+    _rawleds[1][i].b = random8();
+    _rawleds[2][i].r = random8();
+    _rawleds[2][i].g = random8();
+    _rawleds[2][i].b = random8();
+    _rawleds[3][i].r = random8();
+    _rawleds[3][i].g = random8();
+    _rawleds[3][i].b = random8();
+    FastLED.show();
+    int sonarValue = (analogRead(0)*5)/25.4;
+    delay(sonarValue);  //<--remove to inhibit seizure flashing
+  }
+
+  Serial.println(sonarValue);
+}
+
+void wavePattern(){
+  for (int i = 0; i < STRIP_LENGTH; i++){
+    _rawleds[0][i] = CRGB::DarkViolet;
+    _rawleds[1][i] = CRGB::DarkViolet;
+    _rawleds[2][i] = CRGB::DarkViolet;
+    _rawleds[3][i] = CRGB::DarkViolet;
+  }
+  FastLED.show();
+  delay(100);
+  for (int i = 0; i < STRIP_LENGTH; i++){
+    _rawleds[0][i].r = sin8(_rawleds[0][i].r);
+    _rawleds[0][i].g = sin8(_rawleds[0][i].g);
+    _rawleds[0][i].b = sin8(_rawleds[0][i].b);
+    _rawleds[1][i].r = sin8(_rawleds[1][i].r);
+    _rawleds[1][i].g = sin8(_rawleds[1][i].g);
+    _rawleds[1][i].b = sin8(_rawleds[1][i].b);
+    _rawleds[2][i].r = sin8(_rawleds[2][i].r);
+    _rawleds[2][i].g = sin8(_rawleds[2][i].g);
+    _rawleds[2][i].b = sin8(_rawleds[2][i].b);
+    _rawleds[3][i].r = sin8(_rawleds[3][i].r);
+    _rawleds[3][i].g = sin8(_rawleds[3][i].g);
+    _rawleds[3][i].b = sin8(_rawleds[3][i].b);
+    FastLED.show();
+    
+  }  
+  delay(100);
+}
+
+void flashPattern(){
+  for (int i = 0; i < STRIP_LENGTH; i++){
+    _rawleds[0][i] = CRGB::White;
+    _rawleds[1][i] = CRGB::White;
+    _rawleds[2][i] = CRGB::White;
+    _rawleds[3][i] = CRGB::White;
+  }
+  for (int i = 0; i < STRIP_LENGTH; i++){
+    byte rand1 = random8();
+    byte rand2 = random8();
+    byte rand3 = random8();
+    byte rand4 = random8();
+    _rawleds[0][i].r -= rand1;
+    _rawleds[0][i].g -= rand1;
+    _rawleds[0][i].b -= rand1;
+    _rawleds[1][i].r -= rand2;
+    _rawleds[1][i].g -= rand2;
+    _rawleds[1][i].b -= rand2;
+    _rawleds[2][i].r -= rand3;
+    _rawleds[2][i].g -= rand3;
+    _rawleds[2][i].b -= rand3;
+    _rawleds[3][i].r -= rand4;
+    _rawleds[3][i].g -= rand4;
+    _rawleds[3][i].b -= rand4;
+  }
+  FastLED.show();
+  int sonarValue = (analogRead(0)*5)/25.4;
+  delay(100+sonarValue);  //<--remove to inhibit seizure flashing
+}
 double getAudioSignal(){
    unsigned long startMillis= millis();  // Start of sample window
    unsigned int peakToPeak = 0;   // peak-to-peak level
