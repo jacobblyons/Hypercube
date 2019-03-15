@@ -34,11 +34,12 @@ int dir = 1;
 int tracerLength = 3;
 int startIndex = 3;
 int endIndex = 0;
-
+int brightness = 0;
 CRGB _rawleds[4][32];
 
 #define LEFT_BUTTON 18 
 #define RIGHT_BUTTON 19 
+#define CLEAR_BUTTON 3 
 
 
 // pin 8 tan
@@ -59,16 +60,26 @@ void setup()
     pinMode(A0, INPUT); // sonar sensor
     
     attachInterrupt(digitalPinToInterrupt(LEFT_BUTTON), toggleLeft, RISING);
-    attachInterrupt(digitalPinToInterrupt(RIGHT_BUTTON), toggleRight,RISING);
+    attachInterrupt(digitalPinToInterrupt(RIGHT_BUTTON), toggleRight, RISING);
+    attachInterrupt(digitalPinToInterrupt(CLEAR_BUTTON), clearCube, RISING);
 
     times[0] = 0;
     times[1] = 0;
-
+FastLED.setBrightness(0);
 }
 
 void loop()
 {
     runPattern();
+}
+
+void clearCube(){
+  noInterrupts();
+  if(micros() - lastPress < 150000) return;
+  brightness  = (brightness + (255/4)) > 255 ? 0 : (brightness + (255/4));
+  FastLED.setBrightness(brightness);
+  lastPress = micros();
+  interrupts();
 }
 
 void toggleLeft(){
