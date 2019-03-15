@@ -1,6 +1,6 @@
 # HyperCube
 
-[Guide for WS2812B Addressable LED Strip](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+[Guide for WS2812B Addressable LED Strip](https://randomnerdtutorials.com/guide-for-ws2812b-addressable-rgb-led-strip-with-arduino/)
 
 [FastLED library](https://github.com/FastLED/FastLED/wiki/Overview)
 
