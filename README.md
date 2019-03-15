@@ -13,3 +13,6 @@
 ### Sensors
 * MB Sonar
 * Microphone
+
+
+![alt text](https://github.com/jacobblyons/Hypercube/blob/master/media/image1.jpg "HyperCube Image")
