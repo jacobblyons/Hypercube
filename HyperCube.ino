@@ -74,6 +74,7 @@ void loop()
 }
 
 void clearCube(){
+  Serial.println("Clear function");
   noInterrupts();
   if(micros() - lastPress < 150000) return;
   brightness  = (brightness + (255/4)) > 255 ? 0 : (brightness + (255/4));
@@ -83,50 +84,52 @@ void clearCube(){
 }
 
 void toggleLeft(){
+    Serial.println("Previous pattern");
     noInterrupts();
     if(micros() - lastPress < 170000) return;
     curPattern = curPattern == 0 ? patternCount -1 : curPattern -1;
-    //Serial.println(curPattern);
+    Serial.println(curPattern);
     lastPress = micros();
     interrupts();
 }
 
 void toggleRight() {
+  Serial.println("Next pattern");
   noInterrupts();
   if(micros() - lastPress < 150000) return;
   curPattern = (curPattern +1) % patternCount;
-  //Serial.println(curPattern);
+  Serial.println(curPattern);
   lastPress = micros();
   interrupts();
 }
 
 void runPattern() {
     if(curPattern == 0){
-      Serial.println("Pattern 0");
+      //Serial.println("0 - Rising/Falling");
       risingFallingPattern();
       }
     else if(curPattern == 1){
-      Serial.println("Pattern 1");
+      //Serial.println("1 - Rainbow");
       randomRainbowPattern();
     }
     else if(curPattern == 2){
-      Serial.println("Pattern 2");
+      //Serial.println("2 - Mic 1");
       micPattern();
     }
     else if(curPattern == 3){
-      Serial.println("Pattern 3");
+      //Serial.println("3 - Mic 2");
       micPattern2();
     }
     else if(curPattern == 4){
-      Serial.println("Pattern 4");
+      //Serial.println("4 - Pattern1");
       playPattern1();
     }
     else if(curPattern == 5){
-      Serial.println("Pattern 5");
+      //Serial.println("5 - Wave");
       wavePattern();
     }
     else if(curPattern == 6){
-      Serial.println("Pattern 6");
+      //Serial.println("6 - Flash");
       flashPattern();
     }
 }
