@@ -37,7 +37,7 @@ int endIndex = 0;
 int brightness = 0;
 CRGB _rawleds[4][32];
 
-#define LEFT_BUTTON 18 
+#define LEFT_BUTTON 18
 #define RIGHT_BUTTON 19 
 #define CLEAR_BUTTON 3 
 
@@ -54,7 +54,8 @@ void setup()
     FastLED.addLeds<NEOPIXEL, STRIP_TWO_PIN>(_rawleds[PURPLE], STRIP_LENGTH);
     FastLED.addLeds<NEOPIXEL, STRIP_THREE_PIN>(_rawleds[PINK], STRIP_LENGTH);
     FastLED.addLeds<NEOPIXEL, STRIP_FOUR_PIN>(_rawleds[GREY], STRIP_LENGTH);
-   
+
+   /*
     pinMode(LEFT_BUTTON, INPUT);
     pinMode(RIGHT_BUTTON, INPUT);
     pinMode(A0, INPUT); // sonar sensor
@@ -62,17 +63,24 @@ void setup()
     attachInterrupt(digitalPinToInterrupt(LEFT_BUTTON), toggleLeft, RISING);
     attachInterrupt(digitalPinToInterrupt(RIGHT_BUTTON), toggleRight, RISING);
     attachInterrupt(digitalPinToInterrupt(CLEAR_BUTTON), clearCube, RISING);
+    */
 
     times[0] = 0;
     times[1] = 0;
-FastLED.setBrightness(0);
+    //FastLED.setBrightness(0);
+    FastLED.setBrightness(255);
 }
 
 void loop()
 {
-    runPattern();
+    //runPattern();
+    //testCorners();
+    //testAll();
+    micPattern();
+    //wavePattern();
 }
 
+/*
 void clearCube(){
   Serial.println("Clear function");
   noInterrupts();
@@ -84,7 +92,7 @@ void clearCube(){
 }
 
 void toggleLeft(){
-    Serial.println("Previous pattern");
+    Serial.println("Previous");
     noInterrupts();
     if(micros() - lastPress < 170000) return;
     curPattern = curPattern == 0 ? patternCount -1 : curPattern -1;
@@ -94,14 +102,14 @@ void toggleLeft(){
 }
 
 void toggleRight() {
-  Serial.println("Next pattern");
+  Serial.println("Next");
   noInterrupts();
   if(micros() - lastPress < 150000) return;
   curPattern = (curPattern +1) % patternCount;
   Serial.println(curPattern);
   lastPress = micros();
   interrupts();
-}
+}*/
 
 void runPattern() {
     if(curPattern == 0){
